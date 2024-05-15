@@ -29,6 +29,7 @@ public class Updater implements Download.Callback {
     private AlertDialog dialog;
     private boolean dev;
     private String  updater="update.apk";
+    private String  gx;
     private static class Loader {
         static volatile Updater INSTANCE = new Updater();
     }
@@ -85,6 +86,7 @@ public class Updater implements Download.Callback {
             String name = object.optString("name");
             String desc = object.optString("desc");
             String api = object.optString("api");
+            gx = object.optString("gx");
             Hawk.put(HawkConfig.API_URL, api);
             int code = object.optInt("code");
             if (need(code, name)) App.post(() -> show(activity, name, desc));
@@ -106,7 +108,11 @@ public class Updater implements Download.Callback {
         return dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).setCancelable(false).create();
     }
 
-    private void cancel(View view) {
+    private void cancel(View view) {if (gx.equals("1")) {
+        //退出APP
+        System.exit(0);
+    }
+
         Setting.putUpdate(false);
         dismiss();
     }
