@@ -163,7 +163,9 @@ public class VodConfig extends Updater {
     }
 
     private void checkJson(JsonObject object, Callback callback) {
-        if (object.has("urls")) {
+        if (object.has("msg") && callback != null) {
+            App.post(() -> callback.error(object.get("msg").getAsString()));
+        } else if (object.has("urls")) {
             parseDepot(object, callback);
         } else {
             parseConfig(object, callback);
@@ -186,6 +188,7 @@ public class VodConfig extends Updater {
             initOther(object);
             if (loadLive && object.has("lives")) initLive(object);
             jarLoader.parseJar("", Json.safeString(object, "spider"));
+            config.logo(Json.safeString(object, "logo"));
             config.json(object.toString()).update();
             App.post(callback::success);
         } catch (Throwable e) {
