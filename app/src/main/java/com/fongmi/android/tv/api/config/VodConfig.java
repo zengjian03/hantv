@@ -1,7 +1,6 @@
 package com.fongmi.android.tv.api.config;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.R;

@@ -2,7 +2,6 @@ package com.fongmi.android.tv;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -22,7 +21,6 @@ import com.orhanobut.hawk.Hawk;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class Updater implements Download.Callback {
