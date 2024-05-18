@@ -2,7 +2,6 @@ package com.fongmi.android.tv.ui.fragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -119,7 +118,6 @@ public class HomeFragment extends BaseFragment implements VodPresenter.OnClickLi
         mHistoryAdapter = new ArrayObjectAdapter(mPresenter = new HistoryPresenter(this));
         homeUI = Setting.getHomeUI();
         button = Setting.getHomeButtons(Button.getDefaultButtons());
-        if (funcRow != null) setTitleNextFocus(funcRow);
     }
 
     public void addVideo(Result result) {
@@ -147,13 +145,6 @@ public class HomeFragment extends BaseFragment implements VodPresenter.OnClickLi
         return new ListRow(adapter);
     }
 
-    private void setTitleNextFocus(ListRow funcRow) {
-        if (funcRow == null) return;
-        Func func = (Func) funcRow.getAdapter().get(0);
-        int downId = getHomeActicity().mBinding.recycler.getVisibility() == View.VISIBLE ? -1 : func.getId();
-        getHomeActicity().mBinding.title.setNextFocusDownId(downId);
-    }
-
     private void refreshFuncRow() {
         if (homeUI == Setting.getHomeUI() && Setting.getHomeButtons(Button.getDefaultButtons()).equals(button)) return;
         if (!TextUtils.isEmpty(button)) mAdapter.removeItems(0, 1);
@@ -161,7 +152,6 @@ public class HomeFragment extends BaseFragment implements VodPresenter.OnClickLi
         button = Setting.getHomeButtons(Button.getDefaultButtons());
         ListRow funcRow = getFuncRow();
         if (funcRow != null) mAdapter.add(0, funcRow);
-        if (funcRow != null) setTitleNextFocus(funcRow);
     }
 
     public void refreshRecommond() {
