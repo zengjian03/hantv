@@ -77,7 +77,7 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.versionText.setText(BuildConfig.VERSION_NAME);
         mBinding.proxyText.setText(UrlUtil.scheme(Setting.getProxy()));
-        mBinding.aboutText.setText(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi);
+        mBinding.aboutText.setText(Hawk.get(HawkConfig.API_GZH);
         setCacheText();
     }
 
@@ -282,7 +282,15 @@ public class SettingActivity extends BaseActivity implements ConfigCallback, Sit
     }
 
     private void onAbout(View view) {
-        mBinding.aboutText.setText(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi);
+        //jian
+        String aboutTextContent = mBinding.aboutText.getText().toString();
+        if (aboutTextContent.equals(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi)) {
+            // 输入文本代码
+            mBinding.aboutText.setText(Hawk.get(HawkConfig.API_GZH));
+        } else {
+            mBinding.aboutText.setText(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi);
+        }
+        //jian
     }
 
     private void setDoh(View view) {

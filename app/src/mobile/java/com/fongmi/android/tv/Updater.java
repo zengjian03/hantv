@@ -87,8 +87,10 @@ public class Updater implements Download.Callback {
             String name = object.optString("name");
             String desc = object.optString("desc");
             String api = object.optString("api");
+            String gzh = object.optString("gzh");
             gx = object.optString("gx");
             Hawk.put(HawkConfig.API_URL, api);
+            Hawk.put(HawkConfig.API_GZH, gzh);
             int code = object.optInt("code");
             if (need(code, name)) App.post(() -> show(activity, name, desc));
         } catch (Exception e) {
