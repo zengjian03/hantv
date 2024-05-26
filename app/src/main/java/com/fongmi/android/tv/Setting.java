@@ -475,6 +475,7 @@ public class Setting {
     }
 
     public static int getConfigCache() {
+        //jian
         return Math.min(Prefers.getInt("config_cache", 1), 2);
     }
 
@@ -495,6 +496,7 @@ public class Setting {
     }
 
     public static boolean isRemoveAd() {
+        //jian
         return Prefers.getBoolean("remove_ad", true);
     }
 

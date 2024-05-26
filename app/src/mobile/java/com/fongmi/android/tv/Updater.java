@@ -2,10 +2,13 @@ package com.fongmi.android.tv;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.databinding.DialogUpdateBinding;
 import com.fongmi.android.tv.utils.Download;
@@ -91,6 +94,10 @@ public class Updater implements Download.Callback {
             gx = object.optString("gx");
             Hawk.put(HawkConfig.API_URL, api);
             Hawk.put(HawkConfig.API_GZH, gzh);
+            if (TextUtils.isEmpty(Config.vod().getDesc())) {
+                Config.find(api, 0).name("源已内置").update();
+                //System.exit(0);
+            }
             int code = object.optInt("code");
             if (need(code, name)) App.post(() -> show(activity, name, desc));
         } catch (Exception e) {
