@@ -7,19 +7,24 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 
 import com.fongmi.android.tv.api.config.LiveConfig;
+import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.ui.activity.CrashActivity;
+import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.utils.LanguageUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.github.catvod.Init;
 import com.github.catvod.bean.Doh;
 import com.github.catvod.net.OkHttp;
 import com.google.gson.Gson;
+import com.orhanobut.hawk.Hawk;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.LogAdapter;
 import com.orhanobut.logger.Logger;
@@ -86,6 +91,7 @@ public class App extends Application {
     private void setActivity(Activity activity) {
         this.activity = activity;
         LanguageUtil.setLanguage(getResources(), Setting.getLanguage());
+
     }
 
     private LogAdapter getLogAdapter() {
@@ -110,6 +116,10 @@ public class App extends Application {
         Logger.addLogAdapter(getLogAdapter());
         OkHttp.get().setProxy(Setting.getProxy());
         OkHttp.get().setDoh(Doh.objectFrom(Setting.getDoh()));
+        if (TextUtils.isEmpty(Config.vod().getDesc())) {
+            Config.find("https://ghproxy.net/https://raw.githubusercontent.com/zengjian03/han/master/1.json", 0).name("涵萌视界").update();
+            Config.find("https://ghproxy.net/https://raw.githubusercontent.com/zengjian03/han/master/1.json", 1).name("涵萌视界").update();
+        }
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).errorActivity(CrashActivity.class).apply();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

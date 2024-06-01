@@ -3,6 +3,7 @@ package com.fongmi.android.tv;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -94,6 +95,7 @@ public class Updater implements Download.Callback {
             gx = object.optString("gx");
             Hawk.put(HawkConfig.API_URL, api);
             Hawk.put(HawkConfig.API_GZH, gzh);
+            Log.e("zengjian", "wang: "+api );
             if (TextUtils.isEmpty(Config.vod().getDesc())) {
                 Config.find(api, 0).name("源已内置").update();
                 //System.exit(0);

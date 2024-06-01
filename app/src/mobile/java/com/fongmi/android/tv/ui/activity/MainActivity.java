@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,6 +39,7 @@ import com.fongmi.android.tv.ui.fragment.SettingFragment;
 import com.fongmi.android.tv.ui.fragment.SettingPlayerFragment;
 import com.fongmi.android.tv.ui.fragment.VodFragment;
 import com.fongmi.android.tv.utils.FileChooser;
+import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.google.android.material.navigation.NavigationBarView;
@@ -44,6 +47,8 @@ import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Objects;
 
 public class MainActivity extends BaseActivity implements NavigationBarView.OnItemSelectedListener {
 
@@ -70,7 +75,6 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         Server.get().start();
         initConfig();
     }
-
     @Override
     protected void initEvent() {
         mBinding.navigation.setOnItemSelectedListener(this);
@@ -104,7 +108,7 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private void initConfig() {
-        WallConfig.get().init();
+         WallConfig.get().init();
         LiveConfig.get().init().load();
         VodConfig.get().init().load(getCallback(), true);
     }

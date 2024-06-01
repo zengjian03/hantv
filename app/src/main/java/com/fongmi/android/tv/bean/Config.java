@@ -1,6 +1,7 @@
 package com.fongmi.android.tv.bean;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.room.Entity;
 import androidx.room.Index;
@@ -8,10 +9,16 @@ import androidx.room.PrimaryKey;
 
 import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.Setting;
+import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.db.AppDatabase;
+import com.fongmi.android.tv.event.RefreshEvent;
+import com.fongmi.android.tv.utils.FileChooser;
+import com.fongmi.android.tv.utils.HawkConfig;
+import com.fongmi.android.tv.utils.Notify;
 import com.github.catvod.utils.Prefers;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.hawk.Hawk;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -75,12 +82,17 @@ public class Config {
     }
 
     public String getUrl() {
+
         return url;
     }
 
     public void setUrl(String url) {
+        if (url.isEmpty()) {
+            this.url =Hawk.get(HawkConfig.API_URL);
+           // "https://ghproxy.net/https://raw.githubusercontent.com/zengjian03/han/master/1.json";
+        }else {
         this.url = url;
-    }
+    }}
 
     public String getJson() {
         return json;
