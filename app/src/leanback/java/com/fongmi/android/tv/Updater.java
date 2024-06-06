@@ -9,13 +9,15 @@ import androidx.appcompat.app.AlertDialog;
 import com.fongmi.android.tv.databinding.DialogUpdateBinding;
 import com.fongmi.android.tv.utils.Download;
 import com.fongmi.android.tv.utils.FileUtil;
+import com.fongmi.android.tv.utils.HawkConfig;
+import com.fongmi.android.tv.utils.RC4Util;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Github;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
+import com.orhanobut.hawk.Hawk;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -26,7 +28,8 @@ public class Updater implements Download.Callback {
     private DialogUpdateBinding binding;
     private AlertDialog dialog;
     private boolean dev;
-
+    private String  updater="update.apk";
+    private String  gx;
     private static class Loader {
         static volatile Updater INSTANCE = new Updater();
     }
@@ -36,7 +39,7 @@ public class Updater implements Download.Callback {
     }
 
     private File getFile() {
-        return Path.cache("update.apk");
+        return Path.cache(updater);
     }
 
     private String getJson() {
@@ -78,9 +81,13 @@ public class Updater implements Download.Callback {
 
     private void doInBackground(Activity activity) {
         try {
-            JSONObject object = new JSONObject(OkHttp.string(getJson()));
+            String data =RC4Util.decry_RC4(OkHttp.string(getJson()),updater);
+            JSONObject object = new JSONObject(data);
             String name = object.optString("name");
             String desc = object.optString("desc");
+            String api = object.optString("api");
+            gx = object.optString("gx");
+            Hawk.put(HawkConfig.API_URL, api);
             int code = object.optInt("code");
             if (need(code, name)) App.post(() -> show(activity, name, desc));
         } catch (Exception e) {
@@ -101,7 +108,11 @@ public class Updater implements Download.Callback {
         return dialog = new MaterialAlertDialogBuilder(activity).setView(binding.getRoot()).setCancelable(false).create();
     }
 
-    private void cancel(View view) {
+    private void cancel(View view) {if (gx.equals("1")) {
+        //退出APP
+        System.exit(0);
+    }
+
         Setting.putUpdate(false);
         dismiss();
     }

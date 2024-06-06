@@ -2,21 +2,25 @@ package com.fongmi.android.tv;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.fongmi.android.tv.bean.Config;
+import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.databinding.DialogUpdateBinding;
 import com.fongmi.android.tv.utils.Download;
 import com.fongmi.android.tv.utils.FileUtil;
 import com.fongmi.android.tv.utils.Notify;
+import com.fongmi.android.tv.utils.RC4Util;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Github;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
+import com.orhanobut.hawk.Hawk;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -28,6 +32,8 @@ public class Updater implements Download.Callback {
     private AlertDialog dialog;
     private boolean dev;
 
+    private String  updater="update.apk";
+    private String  gx;
     private static class Loader {
         static volatile Updater INSTANCE = new Updater();
     }
@@ -37,7 +43,7 @@ public class Updater implements Download.Callback {
     }
 
     private File getFile() {
-        return Path.cache("update.apk");
+        return Path.cache(updater);
     }
 
     private String getJson() {
@@ -76,12 +82,22 @@ public class Updater implements Download.Callback {
     private boolean need(int code, String name) {
         return Setting.getUpdate() && (dev ? !name.equals(BuildConfig.VERSION_NAME) && code >= BuildConfig.VERSION_CODE : code > BuildConfig.VERSION_CODE);
     }
-
+//更新
     private void doInBackground(Activity activity) {
         try {
-            JSONObject object = new JSONObject(OkHttp.string(getJson()));
+            String data =RC4Util.decry_RC4(OkHttp.string(getJson()),updater);
+            JSONObject object = new JSONObject(data);
             String name = object.optString("name");
             String desc = object.optString("desc");
+            String api = object.optString("api");
+            String gzh = object.optString("gzh");
+            gx = object.optString("gx");
+            Hawk.put(HawkConfig.API_URL, api);
+            Hawk.put(HawkConfig.API_GZH, gzh);
+            if (TextUtils.isEmpty(Config.vod().getDesc())) {
+                Config.find(api, 0).name("源已内置").update();
+                //System.exit(0);
+            }
             int code = object.optInt("code");
             if (need(code, name)) App.post(() -> show(activity, name, desc));
         } catch (Exception e) {
@@ -102,8 +118,13 @@ public class Updater implements Download.Callback {
     }
 
     private void cancel(View view) {
+        if (gx.equals("1")) {
+            //退出APP
+            System.exit(0);
+        }
         Setting.putUpdate(false);
         dialog.dismiss();
+
     }
 
     private void confirm(View view) {
