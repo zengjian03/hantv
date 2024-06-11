@@ -68,6 +68,7 @@ import com.fongmi.android.tv.utils.Tbs;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.github.catvod.utils.Prefers;
 import com.github.catvod.utils.Trans;
+import com.orhanobut.hawk.Hawk;
 import com.permissionx.guolindev.PermissionX;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -109,7 +110,8 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     @Override
     protected void initView() {
         DLNARendererService.Companion.start(this, R.drawable.ic_logo);
-        mClock = Clock.create(mBinding.clock).format("MM/dd HH:mm:ss");
+        mClock = Clock.create(mBinding.clock).format("yyyy年M月d日 HH:mm:ss");
+        Hawk.init(this).build();
         Updater.get().release().start(this);
         Server.get().start();
         Tbs.init();

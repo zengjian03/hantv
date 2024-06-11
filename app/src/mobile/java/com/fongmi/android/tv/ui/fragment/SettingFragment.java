@@ -43,6 +43,7 @@ import com.fongmi.android.tv.ui.dialog.TransmitActionDialog;
 import com.fongmi.android.tv.ui.dialog.TransmitDialog;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.FileUtil;
+import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.UrlUtil;
@@ -50,6 +51,7 @@ import com.github.catvod.bean.Doh;
 import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.orhanobut.hawk.Hawk;
 import com.permissionx.guolindev.PermissionX;
 
 import org.greenrobot.eventbus.EventBus;
@@ -271,7 +273,13 @@ public class SettingFragment extends BaseFragment implements ConfigCallback, Sit
     }
 
     private void onAbout(View view) {
-        mBinding.aboutText.setText(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi);
+        String aboutTextContent = mBinding.aboutText.getText().toString();
+        if (aboutTextContent.equals(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi)) {
+            // 输入文本代码
+            mBinding.aboutText.setText(Hawk.get(HawkConfig.API_GZH));
+        } else {
+            mBinding.aboutText.setText(BuildConfig.FLAVOR_mode + "-" + BuildConfig.FLAVOR_api + "-" + BuildConfig.FLAVOR_abi);
+        }
     }
 
     private void onVersion(View view) {

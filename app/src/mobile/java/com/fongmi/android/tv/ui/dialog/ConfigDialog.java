@@ -67,7 +67,9 @@ public class ConfigDialog {
 
     private void initView() {
         binding.name.setText(getConfig().getName());
-        binding.url.setText(ori = getConfig().getUrl());
+        if (TextUtils.isEmpty(getConfig().getName())) {
+            binding.url.setText(ori = getConfig().getUrl());
+        }
         binding.input.setVisibility(edit ? View.VISIBLE : View.GONE);
         binding.url.setSelection(TextUtils.isEmpty(ori) ? 0 : ori.length());
     }

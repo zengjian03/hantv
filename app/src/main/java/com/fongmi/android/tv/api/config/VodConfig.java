@@ -14,6 +14,7 @@ import com.fongmi.android.tv.bean.Parse;
 import com.fongmi.android.tv.bean.Rule;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.impl.Callback;
+import com.fongmi.android.tv.utils.HawkConfig;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.github.catvod.bean.Doh;
@@ -24,7 +25,7 @@ import com.github.catvod.utils.Json;
 import com.github.catvod.utils.Util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import com.orhanobut.hawk.Hawk;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -134,6 +135,13 @@ public class VodConfig {
 
     private void loadConfig(Callback callback) {
         try {
+            //jian
+            String url = config.getUrl();
+            if (TextUtils.isEmpty(url)) {
+                url = Hawk.get(HawkConfig.API_URL);
+                Config.find(url, 0).name("源已内置").update();
+            }
+            //jian
             checkJson(Json.parse(Decoder.getJson(config.getUrl())).getAsJsonObject(), callback);
         } catch (Throwable e) {
             if (TextUtils.isEmpty(config.getUrl())) App.post(() -> callback.error(""));

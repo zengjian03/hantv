@@ -40,6 +40,8 @@ import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.google.android.material.navigation.NavigationBarView;
+import com.orhanobut.hawk.Hawk;
+
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -63,6 +65,7 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        Hawk.init(this).build();
         Updater.get().release().start(this);
         initFragment(savedInstanceState);
         Server.get().start();

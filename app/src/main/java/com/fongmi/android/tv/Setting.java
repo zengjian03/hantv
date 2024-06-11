@@ -475,7 +475,8 @@ public class Setting {
     }
 
     public static int getConfigCache() {
-        return Math.min(Prefers.getInt("config_cache", 0), 2);
+        //jian
+        return Math.min(Prefers.getInt("config_cache", 1), 2);
     }
 
     public static void putLanguage(int key) {
@@ -495,7 +496,8 @@ public class Setting {
     }
 
     public static boolean isRemoveAd() {
-        return Prefers.getBoolean("remove_ad", false);
+        //jian
+        return Prefers.getBoolean("remove_ad", true);
     }
 
     public static void putRemoveAd(boolean remove) {
